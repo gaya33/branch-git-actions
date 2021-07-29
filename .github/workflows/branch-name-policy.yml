@@ -32,10 +32,10 @@ jobs:
       - name: test
         run: echo '!!!!' + ${{ steps.extract_branch.outputs.branch > 5 }}
       - name: Post a comment
+        if: ${{ steps.extract_branch.outputs.branch > 5 }}
         uses: actions/github-script@v4
         with:
           fetch-depth: 2
-          if: ${{ steps.extract_branch.outputs.branch > 5 }}
           script: |
             github.issues.createComment({
               issue_number: context.issue.number,
