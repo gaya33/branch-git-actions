@@ -32,7 +32,7 @@ jobs:
         id: extract_branch
       - name: Extract branch name
         shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${#steps.extract_branch.outputs.extract_branch})"
+        run: echo "##[set-output name=branch;]$(echo ${#${{ steps.extract_branch.outputs.extract_branch }}})"
         id: extract_branch_length
       - name: test
         run: |
