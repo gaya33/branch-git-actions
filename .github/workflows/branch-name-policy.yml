@@ -25,9 +25,9 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Post comment
-        uses: zendesk/github-script@v1
+        uses: actions/github-script@v4.0.2
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{github.token}}
           script: |
             github.issues.createComment({
               issue_number: context.issue.number,
@@ -36,8 +36,4 @@ jobs:
               body: 'New comment on git'
             })
 
-      # Runs a set of commands using the runners shell
-      - name: Post branch name warning comment
-      - if: ${{ branch_name=$(echo "${GITHUB_HEAD_REF:-$GITHUB_REF}" | sed -e 's/refs\/heads\///') && branch_name_length=${#branch_name} && ($branch_name_length -gt 49) }}
-        run:
-          echo "Deployment is bound to fail for branches with long names" && exit 1
+
