@@ -25,16 +25,15 @@ jobs:
           branch_name_length=${#branch_name}
           echo '!!! - ' + '${{ github.head_ref }}'
           echo $branch_name_length
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_HEAD_REF})"
+        id: extract_branch
       - name: Post a comment
         uses: actions/github-script@v4
         with:
           fetch-depth: 2
-          run: |
-            branch_name=$(echo "${GITHUB_HEAD_REF:-$GITHUB_REF}" | sed -e 's/refs\/heads\///')
-            branch_name_length=${#branch_name}
-            echo '!!! - ' + '${{ github.head_ref }}'
-            echo $branch_name_length
-          if: ${{ $branch_name_length > 5 }}
+          if: ${{ steps.extract_branch.outputs.branch > 5 }}
           script: |
             github.issues.createComment({
               issue_number: context.issue.number,
