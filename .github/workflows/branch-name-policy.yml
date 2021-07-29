@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: branch name
         run: |
-          echo '!!! - ${{ github.head_ref.length }}'
+          echo '!!! - ' + '${{ github.head_ref }}'.length
       - name: Post a comment
         uses: actions/github-script@v4
         with:
@@ -33,4 +33,3 @@ jobs:
               repo: context.repo.repo,
               body: '👋 Thanks for reporting!'
             })
-
