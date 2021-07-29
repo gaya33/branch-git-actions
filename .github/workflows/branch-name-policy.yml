@@ -9,6 +9,7 @@ on:
     branches:
       - '!main'
       - '**'
+  pull_request:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -22,21 +23,11 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
       # Runs a set of commands using the runners shell
-      - name: Post branch name warning comment
-        uses: zendesk/github-script@v1
-        if: ${{ ${$(#echo "${GITHUB_HEAD_REF:-$GITHUB_REF}" | sed -e 's/refs\/heads\///')} -gt 49 }}
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Branch name (${branch_name}) contains more than 49 characters. Deployment is bound to fail for branches with long names on staging. To rename a Git branch, run the following command: git branch -m <old> <new> and re-raise a PR with the new branch. This will change the name of the branch you are viewing to the new name you specify.'
-            });
+      - name: Run a multi-line script
+        run: |
+          branch_name=(git rev-parse --abbrev-ref HEAD)
+          branch_name_length=${#branch_name}
+          if [[ $branch_name_length -gt 49 ]]; then
+            echo "Warning: Branch name (${branch_name}) contains more than 49 characters. Deployment is bound to fail for branches with long names"
+          fi
