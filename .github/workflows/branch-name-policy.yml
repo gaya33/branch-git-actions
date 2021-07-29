@@ -31,3 +31,15 @@ jobs:
           if [[ $branch_name_length -gt 49 ]]; then
             echo "Warning: Branch name (${branch_name}) contains more than 49 characters. Deployment is bound to fail for branches with long names"
           fi
+
+      - name: Post a comment
+        uses: actions/github-script@v4
+        with:
+          fetch-depth: 2
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for reporting!'
+            })
