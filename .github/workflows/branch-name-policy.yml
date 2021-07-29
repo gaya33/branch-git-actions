@@ -26,6 +26,7 @@ jobs:
           echo '!!! - ' + '${{ github.head_ref }}'
           echo $branch_name_length
       - name: Post a comment
+        if: ${{ $branch_name_length > 5 }}
         uses: actions/github-script@v4
         with:
           fetch-depth: 2
@@ -36,4 +37,5 @@ jobs:
               repo: context.repo.repo,
               body: '👋 Thanks for reporting!'
             })
+
 
