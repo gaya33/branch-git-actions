@@ -30,7 +30,6 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Post branch name warning comment
         uses: zendesk/github-script@v1
-        if: ${{ ${$(#echo "${GITHUB_HEAD_REF:-$GITHUB_REF}" | sed -e 's/refs\/heads\///')} -gt 49 }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
