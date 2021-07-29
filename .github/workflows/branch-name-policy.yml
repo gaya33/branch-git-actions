@@ -28,8 +28,10 @@ jobs:
         run: |
           branch_name=(git rev-parse --abbrev-ref HEAD)
           branch_name_length=${#branch_name}
+          echo "Warning: branch name and length: ${branch_name}, ${branch_name_length}"
+
           if [[ $branch_name_length -gt 49 ]]; then
-            echo "Warning: Branch name (${branch_name}) contains more than 49 characters. Deployment is bound to fail for branches with long names"
+            echo "Warning: Branch name (${github.token}) contains more than 49 characters. Deployment is bound to fail for branches with long names"
           fi
 
       - name: Post a comment
