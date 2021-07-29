@@ -33,9 +33,9 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Branch name (${branch_name}) contains more than 49 characters. Deployment is bound to fail for branches with long names on staging. To rename a Git branch, run the following command: git branch -m <old> <new> and re-raise a PR with the new branch. This will change the name of the branch you are viewing to the new name you specify.'
-            });
+            branch_name=$(echo "${GITHUB_HEAD_REF:-$GITHUB_REF}" | sed -e 's/refs\/heads\///')
+            branch_name_length=${#branch_name}
+
+            if [[ $branch_name_length -gt 49 ]]; then
+              echo "Warning: Branch name (${branch_name}) contains more than 49 characters. Deployment is bound to fail for branches with long names" && exit 1
+            fi
