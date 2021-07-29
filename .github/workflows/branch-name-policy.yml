@@ -29,6 +29,8 @@ jobs:
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_HEAD_REF})"
         id: extract_branch
+      - name: test
+        run: echo '!!!!' + ${{ steps.extract_branch.outputs.branch > 5 }}
       - name: Post a comment
         uses: actions/github-script@v4
         run: echo '!!!!' + ${{ steps.extract_branch.outputs.branch > 5 }}
