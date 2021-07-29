@@ -22,18 +22,10 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-
       # Runs a single command using the runners shell
-      - name: Post comment
-        uses: actions/github-script@v4.0.2
+      - uses: KeisukeYamashita/create-comment@v1
         with:
-          github-token: ${{github.token}}
-          script: |
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'New comment on git'
-            })
+          comment: |
+            Issue title must start with 'ABC-'.
 
 
