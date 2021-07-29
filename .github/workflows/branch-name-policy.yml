@@ -34,14 +34,12 @@ jobs:
             branch_name_length=${#branch_name}
             echo '!!! - ' + '${{ github.head_ref }}'
             echo $branch_name_length
+          if: ${{ $branch_name_length > 5 }}
           script: |
-            if [[ $branch_name_length > 5 ]]; then
-              github.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: '👋 Thanks for reporting!'
-              })
-            fi
-
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for reporting!'
+            })
 
