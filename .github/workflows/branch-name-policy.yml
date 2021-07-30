@@ -49,6 +49,6 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "👋 Branch name ${{ steps.branch_name_eval.outputs.branch_name }} contains more than 49 characters. Deployment is bound to fail for branches with long names on staging. To rename a Git branch, run the following command: git branch -m <old> <new> and re-raise a PR with the new branch. This will change the name of the branch you are viewing to the new name you specify."
+              body: "👋 Branch name `${{ steps.branch_name_eval.outputs.branch_name }}` contains more than 49 characters. Deployment is bound to fail for branches with long names on staging. \n\nTo rename a Git branch, run the following command:\n ```git branch -m <old> <new>``` \nand re-raise a PR with the new branch. \n\nThis will change the name of the branch you are viewing to the new name you specify."
             })
 
