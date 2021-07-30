@@ -25,11 +25,16 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: branch name
+        id: branch_name_eval
         run: |
           branch_name=$(echo "${GITHUB_HEAD_REF:-$GITHUB_REF}" | sed -e 's/refs\/heads\///')
           branch_name_length=${#branch_name}
-          echo '!!! - ' + '${{ github.head_ref }}'
+          echo "::set-output name=Label_length::$branch_name_length"
+          echo "::set-output name=branch_name::$branch_name"
+          echo '!!! - ' + $branch_name
           echo $branch_name_length
+          echo ${{ steps.branch_name_eval.outputs.branch_name }}
+          echo ${{ steps.branch_name_eval.outputs.Label_length }}
 
       - name: Extract branch name
         shell: bash
@@ -40,21 +45,6 @@ jobs:
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${#steps.extract_branch.outputs.branch})"
         id: extract_branch_length
-
-      - name: Extract branch name length - 2
-        id: getLength
-        shell: bash
-        run: |
-          branch_name=$(echo "${GITHUB_HEAD_REF:-$GITHUB_REF}" | sed -e 's/refs\/heads\///')
-          LL=$(echo $branch_name | jq '. | length')
-          echo "::set-output name=Label_length::$LL"
-          echo "::set-output name=branch_name::$branch_name"
-
-      - name: test
-        run: |
-          echo '!!!!' + ${{ steps.getLength.outputs.Label_length }}
-          echo '!!!!' + ${{ steps.extract_branch.outputs.extract_branch }}
-          echo '!!!!' + ${{ steps.extract_branch.outputs.branch }}
 
       - name: Post a comment
         uses: actions/github-script@v4
