@@ -26,18 +26,31 @@ jobs:
           branch_name_length=${#branch_name}
           echo '!!! - ' + '${{ github.head_ref }}'
           echo $branch_name_length
+
       - name: Extract branch name
         shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_HEAD_REF})"
+        run: echo "##[set-output name=branch;]$(echo ${github.head_ref})"
         id: extract_branch
-      - name: Extract branch name
+
+      - name: Extract branch name length
         shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${#${{ steps.extract_branch.outputs.extract_branch }}})"
+        run: echo "##[set-output name=branch;]$(echo ${#steps.extract_branch.outputs.branch})"
         id: extract_branch_length
+
+      - name: Extract branch name length - 2
+        id: getLength
+        shell: bash
+        run: |
+          echo ${{ steps.extract_branch.outputs.extract_branch }}
+          LL=$(echo ${{ steps.extract_branch.outputs.extract_branch }} | jq '. | length')
+          echo "::set-output name=Label_length::$LL"
+
       - name: test
         run: |
-          echo '!!!!' + ${{ steps.extract_branch.outputs.extract_branch_length > 5 }}
+          echo '!!!!' + ${{ steps.getLength.outputs.Label_length }}
           echo '!!!!' + ${{ steps.extract_branch.outputs.extract_branch }}
+          echo '!!!!' + ${{ steps.extract_branch.outputs.branch }}
+
       - name: Post a comment
         uses: actions/github-script@v4
         with:
