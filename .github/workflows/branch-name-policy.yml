@@ -39,7 +39,6 @@ jobs:
           echo '!!!!' + ${{ steps.extract_branch.outputs.extract_branch_length > 5 }}
           echo '!!!!' + ${{ steps.extract_branch.outputs.extract_branch }}
       - name: Post a comment
-        if: ${{ steps.extract_branch.outputs.branch > 5 }}
         uses: actions/github-script@v4
         with:
           fetch-depth: 2
