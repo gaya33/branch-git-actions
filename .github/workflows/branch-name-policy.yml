@@ -8,6 +8,10 @@ on:
   pull_request:
     types: [opened]
 
+  push:
+    branches:
+      - '**'
+      - '!main'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -41,9 +45,10 @@ jobs:
         id: getLength
         shell: bash
         run: |
-          echo ${{ steps.extract_branch.outputs.extract_branch }}
-          LL=$(echo ${{ steps.extract_branch.outputs.extract_branch }} | jq '. | length')
+          branch_name=$(echo "${GITHUB_HEAD_REF:-$GITHUB_REF}" | sed -e 's/refs\/heads\///')
+          LL=$(echo $branch_name | jq '. | length')
           echo "::set-output name=Label_length::$LL"
+          echo "::set-output name=branch_name::$branch_name"
 
       - name: test
         run: |
